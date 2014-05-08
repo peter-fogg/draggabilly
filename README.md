@@ -34,13 +34,15 @@ When dragging, Draggabillly will add the class `.is-dragging` to the element.
 
 ### containment
 
-**Type:** _Element_, Selector _String_, or _Boolean_
+**Type:** _Element_, Selector _String_, _Boolean_, or _Function_
 
 ``` js
 containment: '#container'
 ```
 
 Contains movement to the bounds of the element. If `true`, the container will be the parent element.
+If function, the function is called on every dragmove event and it should update the instance.dragPoint
+attribute. The function gets passed the Draggabilly instance as first and only argument.
 
 ### handle
 
