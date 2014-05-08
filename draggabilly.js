@@ -329,7 +329,7 @@ Draggabilly.prototype._unbindEvents = function() {
 
 Draggabilly.prototype.measureContainment = function() {
   var containment = this.options.containment;
-  if ( !containment ) {
+  if ( !containment || typeof this.options.containment === 'function' ) {
     return;
   }
 
@@ -380,12 +380,16 @@ Draggabilly.prototype.dragMove = function( event, pointer ) {
   this.dragPoint.y -= this.startPoint.y;
 
   if ( this.options.containment ) {
-    var relX = this.relativeStartPosition.x;
-    var relY = this.relativeStartPosition.y;
-    this.dragPoint.x = Math.max( this.dragPoint.x, -relX );
-    this.dragPoint.y = Math.max( this.dragPoint.y, -relY );
-    this.dragPoint.x = Math.min( this.dragPoint.x, this.containerSize.width - relX - this.size.width );
-    this.dragPoint.y = Math.min( this.dragPoint.y, this.containerSize.height - relY - this.size.height );
+    if ( typeof this.options.containment === 'function' ) {
+      this.options.containment.call(null, this);
+    } else {
+      var relX = this.relativeStartPosition.x;
+      var relY = this.relativeStartPosition.y;
+      this.dragPoint.x = Math.max( this.dragPoint.x, -relX );
+      this.dragPoint.y = Math.max( this.dragPoint.y, -relY );
+      this.dragPoint.x = Math.min( this.dragPoint.x, this.containerSize.width - relX - this.size.width );
+      this.dragPoint.y = Math.min( this.dragPoint.y, this.containerSize.height - relY - this.size.height );
+    }
   }
 
   if ( this.options.axis === 'x' ) {
